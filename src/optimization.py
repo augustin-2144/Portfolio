@@ -61,3 +61,39 @@ def efficient_portfolio(target_return, expected_returns, cov_matrix):
         constraints=constraints
     )
     return result.x
+
+
+def sharpe_ratio(weights, expected_returns, cov_matrix, risk_free_rate=0.0):
+    """
+    Compute portfolio Sharpe ratio.
+    """
+    port_ret = portfolio_return(weights, expected_returns)
+    port_vol = portfolio_volatility(weights, cov_matrix)
+    return (port_ret - risk_free_rate) / port_vol
+
+
+def maximize_sharpe(expected_returns, cov_matrix, risk_free_rate=0.0):
+    """
+    Compute portfolio that maximizes Sharpe ratio.
+    """
+    n = len(expected_returns)
+    init_guess = np.ones(n) / n
+
+    bounds = tuple((0, 1) for _ in range(n))
+    constraints = ({
+        "type": "eq",
+        "fun": lambda w: np.sum(w) - 1
+    })
+
+    def negative_sharpe(w):
+        return -sharpe_ratio(w, expected_returns, cov_matrix, risk_free_rate)
+
+    result = minimize(
+        negative_sharpe,
+        init_guess,
+        method="SLSQP",
+        bounds=bounds,
+        constraints=constraints
+    )
+
+    return result.x
