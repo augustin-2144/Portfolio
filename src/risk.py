@@ -1,10 +1,8 @@
 import numpy as np
 import pandas as pd
 
-
 def covariance_matrix(returns):
-    """
-    Compute covariance matrix of asset returns.
+    """ Compute covariance matrix of asset returns
     
     Parameters
     ----------
@@ -18,8 +16,7 @@ def covariance_matrix(returns):
 
 
 def portfolio_volatility(weights, cov):
-    """
-    Compute portfolio volatility.
+    """ Compute portfolio volatility.
     
     Parameters
     ----------
@@ -40,4 +37,3 @@ def portfolio_variance(weights, cov):
     """
     w = np.array(weights)
     return w.T @ cov @ w
-
